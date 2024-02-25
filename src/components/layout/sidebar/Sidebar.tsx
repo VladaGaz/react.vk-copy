@@ -1,7 +1,12 @@
 import { FC } from "react";
+import UserItems from "./UserItems";
 
 const Sidebar: FC = () => {
-  return <div>Sidebar</div>;
+  return (
+    <div>
+      <UserItems />
+    </div>
+  );
 };
 
 export default Sidebar;

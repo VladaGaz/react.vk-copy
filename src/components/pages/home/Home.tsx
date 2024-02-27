@@ -1,10 +1,9 @@
-import Button from "@mui/material/Button";
+import AddPost from "./AddPost";
 
 const Home = () => {
   return (
     <div>
-      Home
-      <Button variant="contained">Hello world</Button>
+      <AddPost />
     </div>
   );
 };

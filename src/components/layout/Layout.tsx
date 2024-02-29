@@ -16,7 +16,7 @@ const Layout: FC<Props> = ({ children }) => {
         <Grid item md={3}>
           <Sidebar />
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={8}>
           {children}
         </Grid>
       </Grid>

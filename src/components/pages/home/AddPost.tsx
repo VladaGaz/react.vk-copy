@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, KeyboardEvent, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { IPost, TypeSetState } from "../../../types";
@@ -10,15 +10,19 @@ interface IAddPost {
 
 const AddPost: FC<IAddPost> = ({ setPosts }) => {
   const [content, setContent] = useState("");
-  const addPostHandler = () => {
+  const addPostHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "Enter") return;
+
     setPosts((prev) => [
-      ...prev,
       {
         author: users[0],
         content,
         createdAt: "5 minutes ago",
       },
+      ...prev,
     ]);
+
+    setContent("");
   };
   return (
     <Box
@@ -34,9 +38,9 @@ const AddPost: FC<IAddPost> = ({ setPosts }) => {
         InputProps={{ sx: { borderRadius: "25px", bgcolor: "#f9f9f9" } }}
         sx={{ width: "100%" }}
         margin={"normal"}
-        onClick={addPostHandler}
         onChange={(e) => setContent(e.target.value)}
         value={content}
+        onKeyDown={addPostHandler}
       />
     </Box>
   );

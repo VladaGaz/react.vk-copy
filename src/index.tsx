@@ -4,6 +4,7 @@ import "./index.css";
 import RoutesComponent from "./components/routes/Routes";
 
 import { initializeApp } from "firebase/app";
+import { AuthProvider } from "./components/providers/AuthProvider";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDjcLoJDUlPwLndu8L-i0dyqD1JbBdiC14",
@@ -22,6 +23,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RoutesComponent />
+    <AuthProvider>
+      <RoutesComponent />
+    </AuthProvider>
   </React.StrictMode>
 );

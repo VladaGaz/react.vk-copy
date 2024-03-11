@@ -1,11 +1,12 @@
 import { Alert, Button, ButtonGroup, Grid, TextField } from "@mui/material";
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, SyntheticEvent, useEffect, useState } from "react";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import { IUserData } from "./types";
+import { useAuth } from "../../providers/useAuth";
 
 const Auth: FC = () => {
   const [isRegForm, setIsRegForm] = useState(false);
@@ -16,15 +17,16 @@ const Auth: FC = () => {
 
   const [error, setError] = useState("");
 
+  const { ga, user } = useAuth();
+  const navigate = useNavigate();
+
   const handleLogin = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const auth = getAuth();
 
     if (isRegForm) {
       try {
         await createUserWithEmailAndPassword(
-          auth,
+          ga,
           userData.email,
           userData.password
         );
@@ -33,11 +35,7 @@ const Auth: FC = () => {
       }
     } else {
       try {
-        await signInWithEmailAndPassword(
-          auth,
-          userData.email,
-          userData.password
-        );
+        await signInWithEmailAndPassword(ga, userData.email, userData.password);
       } catch (error: any) {
         error.message && setError(error.message);
       }
@@ -48,6 +46,10 @@ const Auth: FC = () => {
       password: "",
     });
   };
+
+  useEffect(() => {
+    user && navigate("/");
+  }, [navigate, user]);
 
   return (
     <>

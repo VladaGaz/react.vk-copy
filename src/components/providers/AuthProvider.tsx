@@ -26,21 +26,27 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const unListen = onAuthStateChanged(ga, (authUser) => {
-      setUser(
-        authUser
-          ? {
-              id: authUser?.uid,
-              avatar: users[0].avatar,
-              name: authUser?.displayName || "",
-            }
-          : null
-      );
+      console.log("authUser", authUser);
+
+      if (authUser) {
+        setUser({
+          id: authUser?.uid,
+          avatar: users[0].avatar,
+          name: authUser?.displayName || "",
+        });
+      } else {
+        setUser(null);
+      }
     });
 
-    return () => unListen();
+    return () => {
+      unListen();
+    };
   }, [ga]);
 
-  const values = useMemo(() => ({ user, setUser, ga }), [ga, user]);
+  const values = useMemo(() => ({ user, setUser, ga }), [ga, user?.name, user]);
+
+  console.log("user", user);
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };

@@ -3,7 +3,11 @@ import { useAuth } from "../../providers/useAuth";
 import { signOut } from "firebase/auth";
 
 const User = () => {
-  const { user, ga } = useAuth();
+  const { user, ga, giveUserName } = useAuth();
+
+  if (user?.name === "") {
+    giveUserName();
+  }
 
   return (
     <Card

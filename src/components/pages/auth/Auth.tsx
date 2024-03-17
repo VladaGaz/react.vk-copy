@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { inject, observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
 import { IUserData } from "./types";
 import { useAuth } from "../../providers/useAuth";
@@ -18,6 +19,7 @@ const Auth: FC = () => {
   });
 
   const [error, setError] = useState("");
+  const [isProfileUpdated, setIsProfileUpdated] = useState(false);
 
   const { ga, user } = useAuth();
   const navigate = useNavigate();
@@ -33,9 +35,16 @@ const Auth: FC = () => {
           userData.password
         );
 
-        await updateProfile(res.user, {
+        updateProfile(res.user, {
           displayName: userData.name,
-        });
+        })
+          .then(() => {
+            console.log("Profile updated!");
+            setIsProfileUpdated(true);
+          })
+          .catch((error) => {
+            console.log("An error occurred", error);
+          });
       } catch (error: any) {
         error.message && setError(error.message);
       }
@@ -56,6 +65,8 @@ const Auth: FC = () => {
 
   useEffect(() => {
     user && navigate("/");
+
+    return () => setIsProfileUpdated(false);
   }, [navigate, user]);
 
   return (
@@ -111,4 +122,10 @@ const Auth: FC = () => {
   );
 };
 
-export default Auth;
+export default inject((Store) => {
+  const { setUserNameAdded, giveUserNameAdded } = Store;
+  return {
+    setUserNameAdded,
+    giveUserNameAdded,
+  };
+})(observer(Auth));

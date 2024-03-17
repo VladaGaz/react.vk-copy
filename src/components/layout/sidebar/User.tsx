@@ -1,12 +1,19 @@
 import { Avatar, Button, Card, Chip } from "@mui/material";
 import { useAuth } from "../../providers/useAuth";
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 
 const User = () => {
-  const { user, ga, giveUserName } = useAuth();
+  const { user, ga } = useAuth();
 
-  if (user?.name === "") {
-    giveUserName();
+  if (!user?.name) {
+    onAuthStateChanged(ga, (authUser) => {
+      if (authUser?.displayName && user) {
+        console.log(
+          "giveUserName authUser?.displayName",
+          authUser?.displayName
+        );
+      }
+    });
   }
 
   return (

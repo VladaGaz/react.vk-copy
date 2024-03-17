@@ -15,7 +15,6 @@ interface IContext {
   user: IUser | null;
   setUser: TypeSetState<IUser | null>;
   ga: Auth;
-  giveUserName: any;
 }
 
 export const AuthContext = createContext<IContext>({} as IContext);
@@ -45,23 +44,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [ga]);
 
-  const giveUserName = useMemo(() => {
-    onAuthStateChanged(ga, (authUser) => {
-      if (authUser?.displayName && user) {
-        console.log(
-          "giveUserName authUser?.displayName",
-          authUser?.displayName
-        );
-
-        setUser({ ...user, name: authUser.displayName });
-      }
-    });
-  }, [ga, user]);
-
-  const values = useMemo(
-    () => ({ user, setUser, ga, giveUserName }),
-    [ga, setUser, user, giveUserName]
-  );
+  const values = useMemo(() => ({ user, setUser, ga }), [ga, setUser, user]);
 
   console.log("user", user);
 

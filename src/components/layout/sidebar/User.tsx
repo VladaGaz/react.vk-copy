@@ -1,20 +1,22 @@
 import { Avatar, Button, Card, Chip } from "@mui/material";
 import { useAuth } from "../../providers/useAuth";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import { observer } from "mobx-react-lite";
+import store from "../../../store/Store";
+import { useEffect, useState } from "react";
 
-const User = () => {
+const User = observer(() => {
   const { user, ga } = useAuth();
+  const { giveUserNameAdded } = store;
+  const [name, setName] = useState(user?.name);
 
-  if (!user?.name) {
+  useEffect(() => {
+    if (!giveUserNameAdded || !!name) return;
+
     onAuthStateChanged(ga, (authUser) => {
-      if (authUser?.displayName && user) {
-        console.log(
-          "giveUserName authUser?.displayName",
-          authUser?.displayName
-        );
-      }
+      if (authUser?.displayName) setName(authUser?.displayName);
     });
-  }
+  }, [ga, giveUserNameAdded, name, user]);
 
   return (
     <Card
@@ -28,7 +30,7 @@ const User = () => {
     >
       <Chip
         avatar={<Avatar alt="" src={user?.avatar} />}
-        label={user?.name ? user?.name : "Loading name"}
+        label={name ? name : "Loading name"}
         variant="outlined"
         sx={{ display: "flex", marginBottom: 2 }}
       />
@@ -37,6 +39,6 @@ const User = () => {
       </Button>
     </Card>
   );
-};
+});
 
 export default User;

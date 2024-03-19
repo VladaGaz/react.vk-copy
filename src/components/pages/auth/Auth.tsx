@@ -5,12 +5,15 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { IUserData } from "./types";
 import { useAuth } from "../../providers/useAuth";
+import store from "../../../store/Store";
 
-const Auth: FC = () => {
+const Auth: FC = observer(() => {
+  const { setUserNameAdded } = store;
+
   const [isRegForm, setIsRegForm] = useState(false);
   const [userData, setUserData] = useState<IUserData>({
     email: "",
@@ -19,8 +22,6 @@ const Auth: FC = () => {
   });
 
   const [error, setError] = useState("");
-  const [isProfileUpdated, setIsProfileUpdated] = useState(false);
-
   const { ga, user } = useAuth();
   const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ const Auth: FC = () => {
         })
           .then(() => {
             console.log("Profile updated!");
-            setIsProfileUpdated(true);
+            setUserNameAdded(true);
           })
           .catch((error) => {
             console.log("An error occurred", error);
@@ -65,8 +66,6 @@ const Auth: FC = () => {
 
   useEffect(() => {
     user && navigate("/");
-
-    return () => setIsProfileUpdated(false);
   }, [navigate, user]);
 
   return (
@@ -120,12 +119,6 @@ const Auth: FC = () => {
       </Grid>
     </>
   );
-};
+});
 
-export default inject((Store) => {
-  const { setUserNameAdded, giveUserNameAdded } = Store;
-  return {
-    setUserNameAdded,
-    giveUserNameAdded,
-  };
-})(observer(Auth));
+export default Auth;

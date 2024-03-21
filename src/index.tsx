@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import RoutesComponent from "./components/routes/Routes";
-
+import { BrowserRouter } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { AuthProvider } from "./components/providers/AuthProvider";
 
@@ -24,7 +24,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <RoutesComponent />
+      <BrowserRouter>
+        <RoutesComponent />
+      </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>
 );

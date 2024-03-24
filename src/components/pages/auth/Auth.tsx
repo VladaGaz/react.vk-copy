@@ -40,7 +40,6 @@ const Auth: FC = observer(() => {
           displayName: userData.name,
         })
           .then(() => {
-            console.log("Profile updated!");
             setUserNameAdded(true);
           })
           .catch((error) => {

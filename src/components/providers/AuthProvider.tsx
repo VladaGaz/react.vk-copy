@@ -7,6 +7,7 @@ import {
   useMemo,
 } from "react";
 import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 import { IUser, TypeSetState } from "../../types";
 import { users } from "../layout/sidebar/dataUsers";
@@ -15,6 +16,7 @@ interface IContext {
   user: IUser | null;
   setUser: TypeSetState<IUser | null>;
   ga: Auth;
+  db: Firestore;
 }
 
 export const AuthContext = createContext<IContext>({} as IContext);
@@ -23,11 +25,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const ga = getAuth();
+  const db = getFirestore();
 
   useEffect(() => {
     const unListen = onAuthStateChanged(ga, (authUser) => {
-      console.log("authUser", authUser);
-
       if (authUser) {
         setUser({
           id: authUser?.uid,
@@ -44,9 +45,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [ga]);
 
-  const values = useMemo(() => ({ user, setUser, ga }), [ga, setUser, user]);
-
-  console.log("user", user);
+  const values = useMemo(
+    () => ({ user, setUser, ga, db }),
+    [ga, setUser, user, db]
+  );
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };

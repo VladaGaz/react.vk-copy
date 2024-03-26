@@ -5,12 +5,10 @@ import Posts from "./Posts";
 import { initialPosts } from "./initialPosts";
 
 const Home = () => {
-  const [posts, setPosts] = useState<IPost[]>(initialPosts);
-
   return (
     <div>
-      <AddPost setPosts={setPosts} />
-      <Posts posts={posts} />
+      <AddPost />
+      <Posts />
     </div>
   );
 };

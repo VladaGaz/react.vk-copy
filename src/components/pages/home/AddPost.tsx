@@ -4,12 +4,8 @@ import TextField from "@mui/material/TextField";
 import { collection, addDoc } from "firebase/firestore";
 import { useAuth } from "../../providers/useAuth";
 import { Alert } from "@mui/material";
-import { IPost, TypeSetState } from "../../../types";
 
-interface IAddPost {
-  setPosts: TypeSetState<IPost[]>;
-}
-const AddPost: FC<IAddPost> = ({ setPosts }) => {
+const AddPost: FC = () => {
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
 
